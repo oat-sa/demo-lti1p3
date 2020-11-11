@@ -37,7 +37,7 @@ parameters:
         NRPS:
             name: !php/const \OAT\Library\Lti1p3Core\Message\Payload\LtiMessagePayloadInterface::CLAIM_LTI_NRPS
             value:
-                context_memberships_url: "http://demo_lti1p3_nginx/platform/service/nrps/memberships"
+                context_memberships_url: "https://lti.showcase.gcp.taocloud.org/platform/service/nrps/memberships"
                 service_versions: ["2.0"]
         Platform instance:
             name: !php/const \OAT\Library\Lti1p3Core\Message\Payload\LtiMessagePayloadInterface::CLAIM_LTI_TOOL_PLATFORM

@@ -1074,12 +1074,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/oat-sa/lib-lti1p3-nrps.git",
-                "reference": "e92151e903d8b0d9c617dd6554d7337ef6562a68"
+                "reference": "c1ede8b99a8d7ca75a9644f82088118371491461"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oat-sa/lib-lti1p3-nrps/zipball/e92151e903d8b0d9c617dd6554d7337ef6562a68",
-                "reference": "e92151e903d8b0d9c617dd6554d7337ef6562a68",
+                "url": "https://api.github.com/repos/oat-sa/lib-lti1p3-nrps/zipball/c1ede8b99a8d7ca75a9644f82088118371491461",
+                "reference": "c1ede8b99a8d7ca75a9644f82088118371491461",
                 "shasum": ""
             },
             "require": {
@@ -1102,7 +1102,7 @@
                 "GPL-2.0-only"
             ],
             "description": "OAT LTI 1.3 Advantage NRPS Library",
-            "time": "2021-02-24T19:54:50+00:00"
+            "time": "2021-03-02T12:09:04+00:00"
         },
         {
             "name": "php-http/message-factory",

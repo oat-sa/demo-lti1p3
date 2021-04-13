@@ -38,12 +38,12 @@ platform_ajax_default_registration_url:
 
 tool_ajax_service_nrps:
     path: /tool/ajax/nrps
-    controller: App\Action\Tool\Ajax\NrpsServiceClientAction
+    controller: App\Action\Tool\Ajax\Nrps\NrpsServiceClientAction
     condition: "request.isXmlHttpRequest()"
 
 tool_ajax_service_basic_outcome:
     path: /tool/ajax/basic-outcome
-    controller: App\Action\Tool\Ajax\BasicOutcomeServiceClientAction
+    controller: App\Action\Tool\Ajax\BasicOutcome\BasicOutcomeServiceClientAction
     condition: "request.isXmlHttpRequest()"
 
 platform_service_nrps:
@@ -56,10 +56,10 @@ platform_basic_outcome_results:
     path: /platform/service/basic-outcome
     controller: App\Action\Platform\Service\BasicOutcome\ResultServiceAction
 
-platform_ags_list_scores:
+platform_ags_list_line_items:
     methods: [GET]
-    path: /platform/service/ags-list-scores
-    controller: App\Action\Platform\Service\Ags\HomeAction
+    path: /platform/service/ags/{contextIdentifier}/lineitems
+    controller: App\Action\Platform\Service\Ags\LineItem\ListLineItemsAction
 
 platform_ags_delete_scores:
     methods: [GET]

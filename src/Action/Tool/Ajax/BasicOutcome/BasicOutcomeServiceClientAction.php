@@ -20,7 +20,7 @@
 
 declare(strict_types=1);
 
-namespace App\Action\Tool\Ajax;
+namespace App\Action\Tool\Ajax\BasicOutcome;
 
 use OAT\Library\Lti1p3BasicOutcome\Message\BasicOutcomeMessageInterface;
 use OAT\Library\Lti1p3BasicOutcome\Service\Client\BasicOutcomeServiceClient;

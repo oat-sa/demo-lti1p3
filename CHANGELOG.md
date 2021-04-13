@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+1.9.0
+-----
+
+* Added tool launch tab for AGS
+* Added platform CRUD for AGS  
+* Updated NRPS and Basic Outcome service endpoints to use new request handler system
+* Updated library and bundle dependencies to 5.x
+
 1.8.0
 -----
 

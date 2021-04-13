@@ -20,52 +20,49 @@
 
 declare(strict_types=1);
 
-namespace App\Action\Platform\Service\BasicOutcome;
+namespace App\Action\Platform\Service\Ags\LineItem;
 
 use OAT\Bundle\Lti1p3Bundle\Security\Authentication\Token\Service\LtiServiceSecurityToken;
-use OAT\Library\Lti1p3BasicOutcome\Service\Server\Handler\BasicOutcomeServiceServerRequestHandler;
-use Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface;
-use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 
-class ResultServiceAction
+class ListLineItemsAction
 {
-    /** @var BasicOutcomeServiceServerRequestHandler */
-    private $handler;
-
     /** @var Security */
     private $security;
 
-    /** @var HttpFoundationFactoryInterface */
-    private $httpFoundationFactory;
+    /** @var CacheItemPoolInterface */
+    private $cache;
 
-    /** @var HttpMessageFactoryInterface */
-    private $psr7Factory;
-
-    public function __construct(
-        BasicOutcomeServiceServerRequestHandler $handler,
-        Security $security,
-        HttpFoundationFactoryInterface $httpFoundationFactory,
-        HttpMessageFactoryInterface $psr7Factory
-    ) {
-        $this->handler = $handler;
+    public function __construct(Security $security, CacheItemPoolInterface $cache)
+    {
         $this->security = $security;
-        $this->httpFoundationFactory = $httpFoundationFactory;
-        $this->psr7Factory = $psr7Factory;
+        $this->cache = $cache;
     }
 
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request, string $contextId, string $lineItemId): Response
     {
         /** @var LtiServiceSecurityToken $token */
         $token = $this->security->getToken();
 
-        $basicOutcomeResponse = $this->handler->handleServiceRequest(
-            $token->getRegistration(),
-            $this->psr7Factory->createRequest($request)
-        );
+        $item = $this->cache->getItem('lti1p3-ags-scores');
 
-        return $this->httpFoundationFactory->createResponse($basicOutcomeResponse);
+        $scores = $item->get();
+
+        $scores[] = [
+            'time' => time(),
+            'registration' => $token->getRegistration()->getIdentifier(),
+            'context' => $contextId,
+            'lineItem' => $lineItemId,
+            'data' => json_decode((string)$request->getContent(), true)
+        ];
+
+        $item->set($scores);
+
+        $this->cache->save($item);
+
+        return new Response('', Response::HTTP_NO_CONTENT);
     }
 }

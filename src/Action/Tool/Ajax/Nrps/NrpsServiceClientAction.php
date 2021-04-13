@@ -20,7 +20,7 @@
 
 declare(strict_types=1);
 
-namespace App\Action\Tool\Ajax;
+namespace App\Action\Tool\Ajax\Nrps;
 
 use OAT\Library\Lti1p3Core\Registration\RegistrationRepositoryInterface;
 use OAT\Library\Lti1p3Nrps\Service\Client\MembershipServiceClient;

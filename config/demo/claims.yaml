@@ -3,9 +3,14 @@ parameters:
         AGS:
             name: !php/const \OAT\Library\Lti1p3Core\Message\Payload\LtiMessagePayloadInterface::CLAIM_LTI_AGS
             value:
-                scopes: []
-                lineitems: "{url|required}"
-                lineitem: "{url|optional}"
+                scope: [
+                    'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem',
+                    'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem.readonly',
+                    'https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly',
+                    'https://purl.imsglobal.org/spec/lti-ags/scope/score'
+                ]
+                lineitems: "http://demo_lti1p3_nginx/platform/service/ags/default/lineitems"
+                lineitem: "http://demo_lti1p3_nginx/platform/service/ags/default/lineitems/default"
         Basic Outcome:
             name: !php/const \OAT\Library\Lti1p3Core\Message\Payload\LtiMessagePayloadInterface::CLAIM_LTI_BASIC_OUTCOME
             value:

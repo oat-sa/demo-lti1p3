@@ -15,13 +15,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2019 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2021 (original work) Open Assessment Technologies SA;
  */
 
 declare(strict_types=1);
 
 namespace App\Nrps;
 
+use OAT\Library\Lti1p3Core\Registration\RegistrationInterface;
 use OAT\Library\Lti1p3Nrps\Model\Member\MemberCollection;
 use OAT\Library\Lti1p3Nrps\Model\Member\MemberInterface;
 use OAT\Library\Lti1p3Nrps\Model\Membership\MembershipInterface;
@@ -41,32 +42,42 @@ class MembershipServiceServerBuilder implements MembershipServiceServerBuilderIn
     /** @var DefaultMembershipFactory */
     private $factory;
 
-    public function __construct(RequestStack $requestStack, MembershipRepository $repository, DefaultMembershipFactory $factory)
-    {
+    public function __construct(
+        RequestStack $requestStack,
+        MembershipRepository $repository,
+        DefaultMembershipFactory $factory
+    ) {
         $this->requestStack = $requestStack;
         $this->repository = $repository;
         $this->factory = $factory;
     }
 
     public function buildResourceLinkMembership(
+        RegistrationInterface $registration,
         string $resourceLinkIdentifier,
         string $role = null,
         int $limit = null,
         int $offset = null
     ): MembershipInterface {
-        return $this->build($role, $limit, $offset);
+        return $this->build($registration, $role, $limit, $offset);
     }
 
     public function buildContextMembership(
+        RegistrationInterface $registration,
         string $role = null,
         int $limit = null,
         int $offset = null
     ): MembershipInterface {
-        return $this->build($role, $limit, $offset);
+        return $this->build($registration, $role, $limit, $offset);
     }
 
-    private function build(string $role = null, int $limit = null, int $offset = null): MembershipInterface
-    {
+    private function build(
+        RegistrationInterface $registration,
+        string $role = null,
+        int $limit = null,
+        int $offset = null
+    ): MembershipInterface {
+
         $request = $this->requestStack->getCurrentRequest();
         $routeParameters = $request->attributes->get('_route_params');
 

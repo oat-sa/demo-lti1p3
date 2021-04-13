@@ -1,0 +1,75 @@
+{% if token.payload.ags %}
+    <div class="alert alert-info" role="alert">
+        <i class="fas fa-graduation-cap"></i>&nbsp;
+        AGS claim provided in message
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <dl class="list-unstyled">
+                <dt>Claim line item container service url</dt>
+                <dd><a href="{{ token.payload.ags.lineItemsContainerUrl }}" target="_blank">{{ token.payload.ags.lineItemsContainerUrl }}</a></dd>
+                <dt>Claim line item service url</dt>
+                <dd>
+                    {% if token.payload.ags.lineItemUrl  %}
+                        <a href="{{ token.payload.ags.lineItemUrl }}" target="_blank">{{ token.payload.ags.lineItemUrl }}</a>
+                    {% else %}
+                        n/a
+                {% endif %}
+                </dd>
+            </dl>
+        </div>
+        <div class="col-md-6">
+            <dl class="list-unstyled">
+                <dt>Claim scopes</dt>
+                {% for scope in token.payload.ags.scopes %}
+                    <dd><code>{{ scope }}</code></dd>
+                {% else %}
+                    <dd>n/a</dd>
+                {% endfor %}
+
+            </dl>
+        </div>
+    </div>
+    <h6 class="card-title">
+        <i class="fas fa-sign-in-alt"></i>&nbsp;AGS Service
+    </h6>
+    <hr/>
+    <div class="card bg-light">
+        <div class="card-header">
+            <ul class="nav nav-tabs nav-fill card-header-tabs" id="ags-pills-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="ags-pills-line-item-tab" data-toggle="pill" href="#ags-pills-line-item" role="tab" aria-controls="ags-pills-line-item" aria-selected="true">
+                        <i class="fas fa-list-alt"></i>&nbsp;Line items
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a a class="nav-link" id="ags-pills-score-tab" data-toggle="pill" href="#ags-pills-score" role="tab" aria-controls="ags-pills-score" aria-selected="false">
+                        <i class="fas fa-poll"></i>&nbsp;Scores
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="ags-pills-result-tab" data-toggle="pill" href="#ags-pills-result" role="tab" aria-controls="ags-pills-result" aria-selected="false">
+                        <i class="fas fa-poll-h"></i>&nbsp;Results
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="ags-pills-line-item" role="tabpanel" aria-labelledby="ags-pills-line-item-tab">
+                    line item
+                </div>
+                <div class="tab-pane fade" id="ags-pills-score" role="tabpanel" aria-labelledby="ags-pills-score-tab">
+                    scores
+                </div>
+                <div class="tab-pane fade" id="ags-pills-result" role="tabpanel" aria-labelledby="ags-pills-result-tab">
+                    resutls
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="alert alert-dark" role="alert">
+        <i class="fas fa-exclamation-circle"></i>&nbsp;No AGS claim provided in message
+    </div>
+{% endif %}

@@ -22,48 +22,50 @@ declare(strict_types=1);
 
 namespace App\Action\Platform\Service\Nrps;
 
-use App\Nrps\MembershipServiceServerBuilder;
-use OAT\Library\Lti1p3Nrps\Service\MembershipServiceInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use OAT\Bundle\Lti1p3Bundle\Security\Authentication\Token\Service\LtiServiceSecurityToken;
+use OAT\Library\Lti1p3Nrps\Service\Server\Handler\MembershipServiceServerRequestHandler;
+use Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface;
+use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
+use Symfony\Component\Security\Core\Security;
 
 class MembershipServiceAction
 {
-    /** @var MembershipServiceServerBuilder */
-    private $builder;
+    /** @var MembershipServiceServerRequestHandler */
+    private $handler;
 
-    public function __construct(MembershipServiceServerBuilder $builder)
-    {
-        $this->builder = $builder;
+    /** @var Security */
+    private $security;
+
+    /** @var HttpFoundationFactoryInterface */
+    private $httpFoundationFactory;
+
+    /** @var HttpMessageFactoryInterface */
+    private $psr7Factory;
+
+    public function __construct(
+        MembershipServiceServerRequestHandler $handler,
+        Security $security,
+        HttpFoundationFactoryInterface $httpFoundationFactory,
+        HttpMessageFactoryInterface $psr7Factory
+    ) {
+        $this->handler = $handler;
+        $this->security = $security;
+        $this->httpFoundationFactory = $httpFoundationFactory;
+        $this->psr7Factory = $psr7Factory;
     }
 
-    public function __invoke(Request $request, string $contextIdentifier, string $membershipIdentifier): JsonResponse
+    public function __invoke(Request $request): Response
     {
-        if (false === strpos($request->headers->get('Accept', ''), MembershipServiceInterface::CONTENT_TYPE_MEMBERSHIP)) {
-            throw new NotAcceptableHttpException(
-                sprintf('Not acceptable content type, accepts: %s', MembershipServiceInterface::CONTENT_TYPE_MEMBERSHIP)
-            );
-        }
+        /** @var LtiServiceSecurityToken $token */
+        $token = $this->security->getToken();
 
-        $limit = $request->get('limit');
-        $offset = $request->get('offset');
-
-        $membership = $this->builder->buildContextMembership(
-            $request->get('role'),
-            $limit ? intval($limit) : null,
-            $offset ? intval($offset) : null
+        $basicOutcomeResponse = $this->handler->handleServiceRequest(
+            $token->getRegistration(),
+            $this->psr7Factory->createRequest($request)
         );
 
-        $responseHeaders = [
-            'Content-Type' => MembershipServiceInterface::CONTENT_TYPE_MEMBERSHIP
-        ];
-
-        if ($membership->getRelationLink()) {
-            $responseHeaders['Link'] = $membership->getRelationLink();
-        }
-
-        return new JsonResponse($membership, Response::HTTP_OK, $responseHeaders);
+        return $this->httpFoundationFactory->createResponse($basicOutcomeResponse);
     }
 }

@@ -32,6 +32,7 @@
         "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
+        "symfony/phpunit-bridge": "^5.2"
     },
     "config": {
         "preferred-install": {

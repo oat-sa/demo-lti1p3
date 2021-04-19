@@ -28,14 +28,11 @@ services:
     OAT\Library\Lti1p3Core\User\UserIdentityFactoryInterface:
         class: OAT\Library\Lti1p3Core\User\UserIdentityFactory
 
-    # LTI deep linking dependencies
+    # LTI AGS dependencies
 
-    OAT\Library\Lti1p3DeepLinking\Message\Launch\Builder\DeepLinkingLaunchRequestBuilder: ~
-
-    OAT\Library\Lti1p3DeepLinking\Message\Launch\Builder\DeepLinkingLaunchResponseBuilder: ~
-
-    OAT\Library\Lti1p3DeepLinking\Factory\ResourceCollectionFactoryInterface:
-        class: OAT\Library\Lti1p3DeepLinking\Factory\ResourceCollectionFactory
+    OAT\Library\Lti1p3Ags\Service\LineItem\Server\Handler\ListLineItemServiceServerRequestHandler:
+        arguments:
+            - '@App\Ags\LineItemRepository'
 
     # LTI basic outcome dependencies
 
@@ -44,6 +41,15 @@ services:
             - '@App\BasicOutcome\BasicOutcomeProcessor'
 
     OAT\Library\Lti1p3BasicOutcome\Service\Client\BasicOutcomeServiceClient: ~
+
+    # LTI deep linking dependencies
+
+    OAT\Library\Lti1p3DeepLinking\Message\Launch\Builder\DeepLinkingLaunchRequestBuilder: ~
+
+    OAT\Library\Lti1p3DeepLinking\Message\Launch\Builder\DeepLinkingLaunchResponseBuilder: ~
+
+    OAT\Library\Lti1p3DeepLinking\Factory\ResourceCollectionFactoryInterface:
+        class: OAT\Library\Lti1p3DeepLinking\Factory\ResourceCollectionFactory
 
     # LTI NRPS dependencies
 
